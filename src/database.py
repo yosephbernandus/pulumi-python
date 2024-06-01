@@ -36,3 +36,33 @@ k8s.core.v1.PersistentVolumeClaim(
     ),
     opts=pulumi.ResourceOptions(provider=cluster.provider),
 )
+
+
+k8s.helm.v3.Chart(
+    release_name="postgres",
+    config=k8s.helm.v3.ChartOpts(
+        chart="postgresql",
+        namespace="database",
+        repo="bitnami",
+        version="15.2.4",
+        values={
+            "primary": {
+                "persistence": {
+                    "enabled": True,
+                    "existingClaim": "postgres-pvc",
+                }
+            },
+            "volumePermissions": {
+                "enabled": True,
+            },
+            "auth": {
+                "enablePostgresUser": True,
+                "postgresPassword": "",
+                "username": "root",
+                "password": "",
+                "database": "example_database"
+            },
+        },
+    ),
+    opts=pulumi.ResourceOptions(provider=cluster.provider),
+)
