@@ -30,3 +30,4 @@
 #
 
 from src import namespace
+from src import database
